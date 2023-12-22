@@ -32,6 +32,21 @@
 $ yarn install
 ```
 
+## Build
+
+```bash
+# docker build
+$ docker compose up
+```
+
+## Database
+
+```bash
+# generate client
+$ yarn prisma db push
+```
+
+
 ## Running the app
 
 ```bash
@@ -39,7 +54,7 @@ $ yarn install
 $ yarn run start
 
 # watch mode
-$ yarn run start:dev
+$ yarn run dev
 
 # production mode
 $ yarn run start:prod

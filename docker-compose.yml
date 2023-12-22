@@ -1,0 +1,32 @@
+version: "3.7"
+
+services:
+  tasks-app-database:
+    image: mongo
+    container_name: tasks-app-database
+    restart: on-failure
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=docker
+      - MONGO_INITDB_ROOT_PASSWORD=docker
+      - MONGO_INITDB_DATABASE=tasks-app
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      
+  tasks-app:
+    build: .
+    container_name: tasks-app
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    volumes:
+      - .:/usr/app
+    links:
+      - tasks-app-database
+    depends_on:
+      - tasks-app-database
+
+volumes:
+  mongodata:
+    driver: local
