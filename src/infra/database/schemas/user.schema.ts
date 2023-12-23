@@ -19,9 +19,6 @@ export class User {
 
   @Prop({ default: now() })
   updatedAt: Date;
-
-  @Prop()
-  deletedAt: Date;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

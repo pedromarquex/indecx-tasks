@@ -1,25 +1,25 @@
-import { PrismaService } from '@/infra/prisma/prisma.service';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
+import { User } from '@/infra/database/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
+import { InjectModel } from '@nestjs/mongoose';
 import { compare, hash } from 'bcryptjs';
+import { Model } from 'mongoose';
 import { LoginUserDto } from './dto/login-user-dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private readonly repository: PrismaService,
+    @InjectModel('User') private readonly userModel: Model<User>,
     private readonly jwtService: JwtService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
     const { password, email, ...rest } = createUserDto;
 
-    const userAlreadyExists = await this.repository.user.findFirst({
-      where: { email },
-    });
+    const userAlreadyExists = await this.userModel.findOne({ email });
 
     if (userAlreadyExists) {
       throw new HttpException(
@@ -37,21 +37,23 @@ export class UsersService {
 
     const passwordHash = await hash(password, 8);
 
-    return this.repository.user.create({
-      data: {
-        ...rest,
-        password: passwordHash,
-        email,
-      },
+    const createdUser = await this.userModel.create({
+      email,
+      password: passwordHash,
+      ...rest,
     });
+
+    createdUser.password = undefined;
+
+    return {
+      createdUser,
+    };
   }
 
   async login(createUserDto: LoginUserDto) {
     const { password, email } = createUserDto;
 
-    const userExists = await this.repository.user.findUnique({
-      where: { email },
-    });
+    const userExists = await this.userModel.findOne({ email });
 
     const passwordMatch = await compare(password, userExists.password);
 
@@ -74,9 +76,7 @@ export class UsersService {
   }
 
   async me(userId: string) {
-    const user = await this.repository.user.findUnique({
-      where: { id: userId },
-    });
+    const user = await this.userModel.findById(userId);
 
     if (!user) {
       throw new HttpException('User not found', HttpStatus.NOT_FOUND);
@@ -96,9 +96,11 @@ export class UsersService {
 
     const { email, name } = updateUserDto;
 
-    const userAlreadyExists = await this.repository.user.findUnique({
-      where: { email },
-    });
+    const userAlreadyExists = await this.userModel.findOne({ email });
+
+    if (!userAlreadyExists) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+    }
 
     if (userAlreadyExists && userAlreadyExists.id !== id) {
       throw new HttpException(
@@ -107,13 +109,20 @@ export class UsersService {
       );
     }
 
-    return this.repository.user.update({
-      where: { id },
-      data: {
+    const updatedUser = await this.userModel.findByIdAndUpdate(
+      id,
+      {
         email,
         name,
       },
-    });
+      { new: true },
+    );
+
+    updatedUser.password = undefined;
+
+    return {
+      updatedUser,
+    };
   }
 
   async remove(id: string, userId: string) {
@@ -121,12 +130,7 @@ export class UsersService {
       throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     }
 
-    await this.repository.user.update({
-      where: { id },
-      data: {
-        active: false,
-      },
-    });
+    await this.userModel.findByIdAndDelete(id);
 
     return {
       message: 'User deleted successfully',
