@@ -12,7 +12,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=docker
       - MONGO_INITDB_DATABASE=tasks-app
     volumes:
-      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongodata:/data/db
       
   tasks-app:
     build: .

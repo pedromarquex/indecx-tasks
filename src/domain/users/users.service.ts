@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
 import { JwtService } from '@nestjs/jwt';
-import { compare, hash } from 'bcrypt';
+import { compare, hash } from 'bcryptjs';
 import { LoginUserDto } from './dto/login-user-dto';
 
 @Injectable()
@@ -17,7 +17,7 @@ export class UsersService {
   async create(createUserDto: CreateUserDto) {
     const { password, email, ...rest } = createUserDto;
 
-    const userAlreadyExists = await this.repository.user.findUnique({
+    const userAlreadyExists = await this.repository.user.findFirst({
       where: { email },
     });
 
