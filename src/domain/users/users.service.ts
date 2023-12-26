@@ -50,14 +50,21 @@ export class UsersService {
     };
   }
 
-  async login(createUserDto: LoginUserDto) {
-    const { password, email } = createUserDto;
+  async login(loginUserDto: LoginUserDto) {
+    const { password, email } = loginUserDto;
 
     const userExists = await this.userModel.findOne({ email });
 
+    if (!userExists) {
+      throw new HttpException(
+        'Invalid email or password',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const passwordMatch = await compare(password, userExists.password);
 
-    if (!userExists || !passwordMatch) {
+    if (!passwordMatch) {
       throw new HttpException(
         'Invalid email or password',
         HttpStatus.BAD_REQUEST,
@@ -97,10 +104,6 @@ export class UsersService {
     const { email, name } = updateUserDto;
 
     const userAlreadyExists = await this.userModel.findOne({ email });
-
-    if (!userAlreadyExists) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
-    }
 
     if (userAlreadyExists && userAlreadyExists.id !== id) {
       throw new HttpException(
