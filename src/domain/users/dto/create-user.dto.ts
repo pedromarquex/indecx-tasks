@@ -13,6 +13,6 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty({ message: 'password is required' })
-  @Length(6, 50, { message: 'password must be between 6 and 50 characters' })
+  @Length(6, 20, { message: 'password must be between 6 and 20 characters' })
   password: string;
 }
