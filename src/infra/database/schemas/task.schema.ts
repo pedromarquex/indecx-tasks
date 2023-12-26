@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, now } from 'mongoose';
+import mongoose, { HydratedDocument, now } from 'mongoose';
 
-export type CatDocument = HydratedDocument<Task>;
+export type TaskDocument = HydratedDocument<Task>;
 
-enum Status {
-  PENDING,
-  IN_PROGRESS,
-  DONE,
+export enum Status {
+  PENDING = 'PENDING',
+  IN_PROGRESS = 'IN_PROGRESS',
+  DONE = 'DONE',
 }
 
 @Schema()
@@ -22,6 +22,9 @@ export class Task {
 
   @Prop({ default: now() })
   createdAt: Date;
+
+  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
+  user: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(Task);
+export const TaskSchema = SchemaFactory.createForClass(Task);
