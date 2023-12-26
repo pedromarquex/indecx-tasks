@@ -14,7 +14,7 @@ export class Task {
   @Prop({ required: true })
   title: string;
 
-  @Prop({ required: true })
+  @Prop()
   description: string;
 
   @Prop({ required: true, enum: Status, type: String, default: Status.PENDING })
