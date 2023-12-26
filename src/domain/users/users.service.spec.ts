@@ -48,7 +48,7 @@ describe('UsersService', () => {
         password: faker.internet.password(),
       };
 
-      const { createdUser: user } = await service.create({
+      const user = await service.create({
         ...userDto,
       });
 
@@ -276,7 +276,7 @@ describe('UsersService', () => {
         password: faker.internet.password(),
       };
 
-      const { createdUser: user } = await service.create({
+      const user = await service.create({
         ...userDto,
       });
 
@@ -346,13 +346,13 @@ describe('UsersService', () => {
         password: faker.internet.password(),
       };
 
-      const { createdUser: user } = await service.create({
+      const user = await service.create({
         ...userDto,
       });
 
       const updatedName = faker.person.fullName();
 
-      const { updatedUser } = await service.updateUser(
+      const updatedUser = await service.updateUser(
         user.id,
         {
           name: updatedName,
@@ -386,7 +386,7 @@ describe('UsersService', () => {
         password: faker.internet.password(),
       };
 
-      const { createdUser: user } = await service.create({
+      const user = await service.create({
         ...userDto,
       });
 
@@ -467,7 +467,7 @@ describe('UsersService', () => {
         password: faker.internet.password(),
       };
 
-      const { createdUser: user } = await service.create({
+      const user = await service.create({
         ...userDto,
       });
 
@@ -487,11 +487,11 @@ describe('UsersService', () => {
         password: faker.internet.password(),
       };
 
-      const { createdUser: user } = await service.create({
+      const user = await service.create({
         ...userDto,
       });
 
-      const { user: userProfile } = await service.me(user.id);
+      const userProfile = await service.me(user.id);
 
       expect(userProfile).toBeDefined();
 

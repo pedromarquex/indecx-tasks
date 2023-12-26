@@ -72,7 +72,7 @@ describe('TasksService', () => {
         status: Status.PENDING,
       };
 
-      const { createdUser: user } = await usersService.create(userDto);
+      const user = await usersService.create(userDto);
 
       const task = await service.create(taskDto, user.id);
 
@@ -112,7 +112,7 @@ describe('TasksService', () => {
         status: Status.PENDING,
       };
 
-      const { createdUser: user } = await usersService.create(userDto);
+      const user = await usersService.create(userDto);
 
       await service.create(taskDto, user.id);
 
@@ -134,7 +134,7 @@ describe('TasksService', () => {
         password: faker.internet.password(),
       };
 
-      const { createdUser: user } = await usersService.create(userDto);
+      const user = await usersService.create(userDto);
 
       const tasks = await service.findAll(user.id);
 

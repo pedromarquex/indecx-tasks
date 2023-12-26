@@ -45,9 +45,7 @@ export class UsersService {
 
     createdUser.password = undefined;
 
-    return {
-      createdUser,
-    };
+    return createdUser;
   }
 
   async login(loginUserDto: LoginUserDto) {
@@ -91,9 +89,7 @@ export class UsersService {
 
     user.password = undefined;
 
-    return {
-      user,
-    };
+    return user;
   }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto, userId: string) {
@@ -123,9 +119,7 @@ export class UsersService {
 
     updatedUser.password = undefined;
 
-    return {
-      updatedUser,
-    };
+    return updatedUser;
   }
 
   async remove(id: string, userId: string) {

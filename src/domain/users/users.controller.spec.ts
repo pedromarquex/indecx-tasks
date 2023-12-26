@@ -46,7 +46,7 @@ describe('UsersController', () => {
         password: faker.internet.password(),
       };
 
-      const { createdUser: user } = await controller.create({
+      const user = await controller.create({
         ...userDto,
       });
 
