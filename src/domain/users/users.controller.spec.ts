@@ -30,6 +30,10 @@ describe('UsersController', () => {
     controller = module.get<UsersController>(UsersController);
   });
 
+  afterAll(async () => {
+    await controller['usersService']['userModel'].deleteMany({});
+  });
+
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });

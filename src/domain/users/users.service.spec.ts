@@ -32,6 +32,10 @@ describe('UsersService', () => {
     service = module.get<UsersService>(UsersService);
   });
 
+  afterAll(async () => {
+    await service['userModel'].deleteMany({});
+  });
+
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
