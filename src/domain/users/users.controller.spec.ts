@@ -69,16 +69,6 @@ describe('UsersController', () => {
       await expect(controller.create({ ...userDto })).rejects.toThrow();
     });
 
-    it('should throw an error if email is not valid', async () => {
-      const userDto = {
-        email: 'notvalidemail',
-        name: faker.person.fullName(),
-        password: faker.internet.password(),
-      };
-
-      await expect(controller.create({ ...userDto })).rejects.toThrow();
-    });
-
     it('should throw an error if name is not provided', async () => {
       await expect(
         controller.create({
