@@ -7,7 +7,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import mongoose from 'mongoose';
 import * as request from 'supertest';
 
-describe('AppController (e2e)', () => {
+describe('Tasks (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {

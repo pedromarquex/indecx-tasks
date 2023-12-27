@@ -5,7 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 
-describe('AppController (e2e)', () => {
+describe('Users (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
