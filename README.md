@@ -34,18 +34,19 @@ $ yarn install
 
 ## Build
 
+We use docker-compose to build the application. You can use the following command to build the application.
+
 ```bash
 # docker build
 $ docker compose up
 ```
 
-## Database
+copy the .env.example file to .env and change the values to your own.
 
 ```bash
-# generate client
-$ yarn prisma db push
+# copy .env.example to .env
+$ cp .env.example .env
 ```
-
 
 ## Running the app
 
@@ -63,16 +64,12 @@ $ yarn run start:prod
 ## Test
 
 ```bash
-# unit tests
+# unit tests with coverage
 $ yarn run test
 
 # e2e tests
 $ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
+``````
 ## Support
 
 Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
