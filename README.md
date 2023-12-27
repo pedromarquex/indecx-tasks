@@ -27,18 +27,18 @@
 A [Nest](https://github.com/nestjs/nest) REST API application that allows users to create, read, update and delete (CRUD) tasks. The application uses a MongoDB database to store the tasks.
 
 ## Requirements
-[Node.js](https://nodejs.org/en/) v18 or higher
-[Yarn](https://yarnpkg.com/) to install dependencies
-[Docker](https://www.docker.com/) to build the application
-[Docker Compose](https://docs.docker.com/compose/) to build the application
-[MongoDB](https://www.mongodb.com/) to store the tasks
-[Mongoose](https://mongoosejs.com/) to connect to the database
-[NestJS](https://nestjs.com/) to build the application
-[TypeScript](https://www.typescriptlang.org/) to write the code
-[Swagger](https://swagger.io/) to document the API
-[Insomnia](https://www.insomnia.rest/) to test the API
-[VSCode](https://code.visualstudio.com/) to edit the code
-[Git](https://git-scm.com/) to clone the repository
+- [Node.js](https://nodejs.org/en/) v18 or higher
+- [Yarn](https://yarnpkg.com/) to install dependencies
+- [Docker](https://www.docker.com/) to build the application
+- [Docker Compose](https://docs.docker.com/compose/) to build the application
+- [MongoDB](https://www.mongodb.com/) to store the tasks
+- [Mongoose](https://mongoosejs.com/) to connect to the database
+- [NestJS](https://nestjs.com/) to build the application
+- [TypeScript](https://www.typescriptlang.org/) to write the code
+- [Swagger](https://swagger.io/) to document the API
+- [Insomnia](https://www.insomnia.rest/) to test the API
+- [VSCode](https://code.visualstudio.com/) to edit the code
+- [Git](https://git-scm.com/) to clone the repository
 
 ## Installation
 
