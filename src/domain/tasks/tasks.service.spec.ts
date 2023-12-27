@@ -96,6 +96,24 @@ describe('TasksService', () => {
         'User not found',
       );
     });
+
+    it('should throw an error if no title is provided', async () => {
+      const userDto = {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      };
+
+      const taskDto = {
+        description: faker.lorem.words(10),
+        status: Status.PENDING,
+        title: undefined,
+      };
+
+      const user = await usersService.create(userDto);
+
+      await expect(service.create(taskDto, user.id)).rejects.toThrow();
+    });
   });
 
   describe('task listing', () => {

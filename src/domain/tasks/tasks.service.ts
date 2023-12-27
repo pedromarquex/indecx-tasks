@@ -55,6 +55,13 @@ export class TasksService {
       throw new HttpException('Task not found', HttpStatus.NOT_FOUND);
     }
 
+    if (task.user.toString() !== userId) {
+      throw new HttpException(
+        'You cannot see a task that is not yours',
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
     return task.populate('user', { password: 0 });
   }
 
