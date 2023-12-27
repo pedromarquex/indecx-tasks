@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import mongoose from 'mongoose';
 import { UsersService } from '../users/users.service';
+import { UpdateTaskDto } from './dto/update-task.dto';
 import { TasksService } from './tasks.service';
 
 describe('TasksService', () => {
@@ -159,4 +160,186 @@ describe('TasksService', () => {
       expect(tasks).toHaveLength(0);
     });
   });
+
+  describe('task retrieving', () => {
+    it('should retrieve a task', async () => {
+      const userDto = {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      };
+
+      const taskDto = {
+        title: faker.lorem.words(3),
+        description: faker.lorem.words(10),
+        status: Status.PENDING,
+      };
+
+      const user = await usersService.create(userDto);
+
+      const task = await service.create(taskDto, user.id);
+
+      const retrievedTask = await service.findOne(task.id, user.id);
+
+      expect(retrievedTask).toHaveProperty('id');
+      expect(retrievedTask).toHaveProperty('title', taskDto.title);
+      expect(retrievedTask).toHaveProperty('description', taskDto.description);
+      expect(retrievedTask).toHaveProperty('status', taskDto.status);
+      expect(retrievedTask.user).toHaveProperty('id', user.id);
+    });
+
+    it('should throw an error if user not found', async () => {
+      const userId = new mongoose.Types.ObjectId().toHexString();
+
+      await expect(service.findOne('task-id', userId)).rejects.toThrow(
+        'User not found',
+      );
+    });
+
+    it('should throw an error if task not found', async () => {
+      const userDto = {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      };
+
+      const user = await usersService.create(userDto);
+
+      const taskId = new mongoose.Types.ObjectId().toHexString();
+
+      await expect(service.findOne(taskId, user.id)).rejects.toThrow(
+        'Task not found',
+      );
+    });
+
+    it('should throw an error if task is not from user', async () => {
+      const userDto = {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      };
+
+      const taskDto = {
+        title: faker.lorem.words(3),
+        description: faker.lorem.words(10),
+        status: Status.PENDING,
+      };
+
+      const user = await usersService.create(userDto);
+
+      const task = await service.create(taskDto, user.id);
+
+      const anotherUser = await usersService.create({
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      });
+
+      await expect(service.findOne(task.id, anotherUser.id)).rejects.toThrow(
+        'You cannot see a task that is not yours',
+      );
+    });
+  });
+
+  describe('task updating', () => {
+    it('should update a task', async () => {
+      const userDto = {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      };
+
+      const taskDto = {
+        title: faker.lorem.words(3),
+        description: faker.lorem.words(10),
+        status: Status.PENDING,
+      };
+
+      const user = await usersService.create(userDto);
+
+      const task = await service.create(taskDto, user.id);
+
+      const updatedTask = await service.update(
+        task.id,
+        {
+          title: faker.lorem.words(3),
+          description: faker.lorem.words(10),
+          status: Status.DONE,
+        },
+        user.id,
+      );
+
+      expect(updatedTask).toHaveProperty('id');
+      expect(updatedTask).toHaveProperty('title');
+      expect(updatedTask).toHaveProperty('description');
+      expect(updatedTask).toHaveProperty('status', Status.DONE);
+      expect(updatedTask.user).toHaveProperty('id', user.id);
+    });
+
+    it('should throw an error if user not found', async () => {
+      const userId = new mongoose.Types.ObjectId().toHexString();
+
+      const taskDto = {
+        title: faker.lorem.words(3),
+      } as unknown as UpdateTaskDto;
+
+      await expect(service.update('task-id', taskDto, userId)).rejects.toThrow(
+        'User not found',
+      );
+    });
+
+    it('should throw an error if task not found', async () => {
+      const userDto = {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      };
+
+      const user = await usersService.create(userDto);
+
+      const taskId = new mongoose.Types.ObjectId().toHexString();
+
+      const taskDto = {
+        title: faker.lorem.words(3),
+      } as unknown as UpdateTaskDto;
+
+      await expect(service.update(taskId, taskDto, user.id)).rejects.toThrow(
+        'Task not found',
+      );
+    });
+
+    it('should throw an error if task is not from user', async () => {
+      const userDto = {
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      };
+
+      const taskDto = {
+        title: faker.lorem.words(3),
+        description: faker.lorem.words(10),
+        status: Status.PENDING,
+      };
+
+      const user = await usersService.create(userDto);
+
+      const task = await service.create(taskDto, user.id);
+
+      const anotherUser = await usersService.create({
+        name: faker.person.fullName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+      });
+
+      const taskDto2 = {
+        title: faker.lorem.words(3),
+      } as unknown as UpdateTaskDto;
+
+      await expect(
+        service.update(task.id, taskDto2, anotherUser.id),
+      ).rejects.toThrow('You cannot update a task that is not yours');
+    });
+  });
+
+  describe('task deletion', () => {});
 });
