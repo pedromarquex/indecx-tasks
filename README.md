@@ -79,7 +79,7 @@ $ yarn run start:prod
 
 The application uses Swagger to document the API. You can access the Swagger UI by going to http://localhost:3000/docs.
 
-## Postman
+## Insomnia
 
 The application uses Insomnia to test the API. You can import the Insomnia collection by importing the file `indecx-tasks-insomnia.json` into Insomnia.
 
